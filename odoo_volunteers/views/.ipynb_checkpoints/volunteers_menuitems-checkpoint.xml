@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <!-- MAIN MENU -->
+        <menuitem name="Volunteers"
+            id="volunteers_main_menu"
+            sequence="1"
+            web_icon="volunteers,static/description/icon.png"/>
+        
+        
+        <record model="ir.actions.act_window" id="volunteer_list_action">
+            <field name="name">Volunteers</field>
+            <field name="res_model">volunteers.volunteer</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create the first volunteer
+                </p>
+            </field>
+        </record>
+        
+        <!-- HEADER: Volunteers -->
+        <menuitem name="Odoo Volunteers"
+                  id="menu_volunteers"
+                  sequence="2"
+                  parent="volunteers_main_menu"/>
+        
+        <menuitem id="menu_volunteers_volunteer" name="Volunteers" parent="menu_volunteers" sequence="3"
+                  action="volunteer_list_action"/>
+        
+        <record model="ir.actions.act_window" id="task_list_action">
+            <field name="name">Tasks</field>
+            <field name="res_model">volunteers.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create the first task
+                </p>
+            </field>
+        </record>
+        
+        <!-- HEADER: Tasks -->
+        <menuitem name="Odoo tasks"
+                  id="menu_task"
+                  sequence="2"
+                  parent="volunteers_main_menu"/>
+        
+        <menuitem id="menu_volunteers_task" name="Tasks" parent="menu_task" sequence="3"
+                  action="task_list_action"/>
+        
+         <!-- HEADER: Volunteers -->
+        <menuitem name="Odoo Coop"
+                  id="menu_coop"
+                  sequence="2"
+                  parent="volunteers_main_menu"/>
+    </data>
+</odoo>

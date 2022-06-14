@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="task_view_form">
+            <field name="name">volunteers.task.form</field>
+            <field name="model">volunteers.task</field>
+            <field name="arch" type="xml">
+                <form string="Task Form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <h1>Start Time <field name="startTime"/></h1>
+                            </group>
+                            <group>
+                                <h1>Stop Time <field name="stopTime"/></h1>
+                            </group>
+                        </group>
+            
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                            <group>
+                                <field name="type"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="task_view_list">
+            <field name="name">volunteers.task.list</field>
+            <field name="model">volunteers.task</field>
+            <field name="arch" type="xml">
+                <tree string="Task List">
+                    <field name="name"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="task_view_search">
+            <field name="name">volunteers.task.search</field>
+            <field name="model">volunteers.task</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="description"/>
+                </search>
+            </field>
+        </record> 
+    </data>
+</odoo>

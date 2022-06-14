@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model="volunteers.volunteer" id="erp_101">
+            <field name="name">Hector Perez</field>
+            <field name="description">
+            Ingeniero de testing
+                -Jest
+            </field>
+            <field name="position">senior</field>
+        </record>
+        <record model="volunteers.volunteer" id="accounting=200">
+            <field name="name">Eduardo Cedillo</field>
+            <field name="description"> 
+            Ingeniero de software
+                -Python
+                -Javascript
+            </field>
+            <field name="position">senior</field>
+        </record>
+        <record model="volunteers.volunteer" id="website_500">
+            <field name="name">Silvestre Ramirez</field>
+            <field name="description"></field>
+            <field name="position">senior</field>
+        </record>
+    </data>
+</odoo>
