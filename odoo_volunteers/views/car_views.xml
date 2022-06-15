@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="car_view_form">
+            <field name="name">volunteers.car.form</field>
+            <field name="model">volunteers.car</field>
+            <field name="arch" type="xml">
+                <form string="Car Form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <h1>Car name: <field name="name"/></h1>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <h1>Task: <field name="task_id"/></h1>
+                            </group>
+                            <group>
+                                <h1>Model: <field name="model"/></h1>
+                            </group>
+                        </group>
+            
+                        <group>
+                            <group>
+                                <field name="year"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="car_view_list">
+            <field name="name">volunteers.car.list</field>
+            <field name="model">volunteers.car</field>
+            <field name="arch" type="xml">
+                <tree string="Car List">
+                    <field name="task_id"/>
+                    <field name="model"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="car_view_search">
+            <field name="name">volunteers.car.search</field>
+            <field name="model">volunteers.car</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="task_id"/>
+                    <field name="model"/>
+                </search>
+            </field>
+        </record> 
+    </data>
+</odoo>

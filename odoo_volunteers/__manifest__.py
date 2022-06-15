@@ -18,6 +18,7 @@
         'security/ir.model.access.csv',
         'views/volunteers_menuitems.xml',
         'views/task_views.xml',
+        'views/car_views.xml',
         
     ],
     'demo': [
