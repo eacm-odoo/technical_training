@@ -14,6 +14,12 @@
                             <group>
                                 <h1>Stop Time <field name="stopTime"/></h1>
                             </group>
+                             <group>
+                                <h2>Leader: <field name="leader_id"/></h2>
+                            </group>
+                            <group>
+                                <h2>State: <field name="state"/></h2>
+                            </group>
                         </group>
             
                         <group>
@@ -27,6 +33,9 @@
                         <notebook>
                             <page string="Description">
                                 <field name="description"/>
+                            </page>
+                            <page string="Volunteers">
+                                <field name="volunteer_ids"/>
                             </page>
                         </notebook>
                     </sheet>

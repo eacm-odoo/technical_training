@@ -29,6 +29,7 @@
         <menuitem id="menu_volunteers_volunteer" name="Volunteers" parent="menu_volunteers" sequence="3"
                   action="volunteer_list_action"/>
         
+        <!-- HEADER: Tasks -->
         <record model="ir.actions.act_window" id="task_list_action">
             <field name="name">Tasks</field>
             <field name="res_model">volunteers.task</field>
@@ -39,8 +40,7 @@
                 </p>
             </field>
         </record>
-        
-        <!-- HEADER: Tasks -->
+
         <menuitem name="Odoo tasks"
                   id="menu_task"
                   sequence="2"
@@ -49,10 +49,5 @@
         <menuitem id="menu_volunteers_task" name="Tasks" parent="menu_task" sequence="3"
                   action="task_list_action"/>
         
-         <!-- HEADER: Volunteers -->
-        <menuitem name="Odoo Coop"
-                  id="menu_coop"
-                  sequence="2"
-                  parent="volunteers_main_menu"/>
     </data>
 </odoo>

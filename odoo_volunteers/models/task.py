@@ -23,3 +23,18 @@ class Task(models.Model):
     
     repeat = fields.Boolean(string='Repeat', default=False)
     frequency = fields.Integer(string='Frequency', default=1)
+
+    state = fields.Selection(string='State',
+                                 selection=[('draft', 'Draft'),
+                                            ('ready', 'Ready'),
+                                            ('in-progress', 'In-Progress'),
+                                            ('done', 'Done'),
+                                            ('cancelled', 'Cancelled')],
+                                    default='draft')
+    leader_id =fields.Many2one(comodel_name='res.partner',string='Leader')
+    volunteer_ids= fields.Many2many(comodel_name='res.partner', string='Volunteers')
+
+    @api.onchange('leader')
+    def _onchange_leader(self):
+        if self.leader:
+            self.state = 'ready'
