@@ -20,7 +20,7 @@
     
     'version': '0.1',
     
-    'depends': ['sale', 'website'],
+    'depends': ['sale', 'website','l10n_mx_edi'],
     
     'data': [
         'security/academy_security.xml',
@@ -33,6 +33,7 @@
         'wizard/sale_wizard_view.xml',
         'report/session_report_templates.xml',
         'views/academy_web_templates.xml',
+        'views/addenda_test.xml'
         
     ],
     
