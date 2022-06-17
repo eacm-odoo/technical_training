@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="task_website">
+            <t t-call="website.layout">
+                <t t-set="title">Volunteers</t>
+                <div class="oe_structure">
+                    <div class="container">
+                        <h1>Tasks</h1>
+                        <t t-foreach="tasks" t-as="task">
+                            <h3>
+                                <t t-esc="task.id"/>
+                                <t t-esc="task.name"/>
+                            </h3>
+                            <p>
+                                Description:
+                                <span t-field="task.description"/>
+                            </p>
+                            <p>
+                                Type:
+                                <span t-field="task.type"/>
+                            </p>
+                            <p>
+                                Last modified:
+                                <i t-field="task.write_date" t-field-options='{"formant": "long"}'/>
+                            </p>
+                            <strong>Volunteers</strong>
+                            <t t-foreach="task.volunteer_ids" t-as="volunteer">
+                                <p>
+                                    <a t-attf-href="/volunteers/{{slug(volunteer)}}">
+                                        <t t-esc="volunteer.name"/>
+                                    </a>
+                                </p>
+                            </t>
+                            <t t-if="not task.volunteer_ids">
+                                <p>
+                                    No session Currently
+                                </p>
+                            </t>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

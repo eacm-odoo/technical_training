@@ -12,7 +12,7 @@
     'author': 'EduardoCedillo(eacm)',
     'category': 'Volunteer',
     'version': '0.1',
-    'depends': ['approvals','base'],
+    'depends': ['approvals','base', 'website'],
     'data': [
         'security/volunteers_security.xml',
         'security/ir.model.access.csv',
@@ -24,6 +24,7 @@
         'report/task_report_templates.xml',
         'report/volunteer_report_templates.xml',
         'views/volunteer_views_inherit.xml',
+        'views/volunteers_web_templates.xml',
     ],
     'demo': [
         #'demo/volunteer_demo.xml',
