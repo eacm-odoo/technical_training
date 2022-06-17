@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_request_form_inherit_volunteers">
+            <field name="name">approval.request.form.inherit.volunteers</field>
+            <field name="model">approval.request</field>
+            <field name="inherit_id" ref="approvals.approval_request_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='request_owner_id']" position="after">
+                    <field name="task_id"/>
+                    <field name="leader_id" attrs="{'invisible':[('task_id','=',False)]}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

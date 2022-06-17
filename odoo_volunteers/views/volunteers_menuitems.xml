@@ -11,7 +11,7 @@
         
         <record model="ir.actions.act_window" id="volunteer_list_action">
             <field name="name">Volunteers</field>
-            <field name="res_model">volunteers.volunteer</field>
+            <field name="res_model">res.partner</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
@@ -33,7 +33,7 @@
         <record model="ir.actions.act_window" id="task_list_action">
             <field name="name">Tasks</field>
             <field name="res_model">volunteers.task</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,gantt</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Create the first task

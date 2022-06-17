@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    
+    <template id="report_task_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 t-field="doc.name" class="mt16"/>
+                        <div class="row mt32 mb32" id="task_info">
+                            <div class="col-auto mw-100 mb-2">
+                                <strong>Task Duration:</strong>
+                                <t t-if="doc.startTime">
+                                    <span t-field="doc.startTime"/>
+                                </t>
+                                to
+                                <t t-if="doc.stopTime">
+                                    <span t-field="doc.stopTime"/>
+                                </t>
+                            </div>
+                            <div t-if="doc.leader_id" class="col-auto mw-100 mb-2">
+                                <strong>Leader:</strong>
+                                <span t-field="doc.leader_id.name"/>
+                            </div>
+                        </div>
+                        <h4>Volunteers</h4>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th name="th_name">Name</th>
+                                    <th name="th_phone">Phone</th>
+                                    <th name="th_email">Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.volunteer_ids" t-as="volunteer">
+                                    <tr>
+                                        <td t-if="volunteer.name" name="td_name">
+                                            <span t-field="volunteer.name"/>
+                                        </td>
+                                        <td t-if="volunteer.phone" name="td_phone">
+                                            <span t-field="volunteer.phone"/>
+                                        </td>
+                                        <td t-if="volunteer.email" name="td_email">
+                                            <span t-field="volunteer.email"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

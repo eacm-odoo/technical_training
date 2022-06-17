@@ -1,6 +1,7 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-head_volunteer,head volunteer,model_volunteers_volunteer,group_head_volunteer,1,1,1,1
-common_volunteer,common volunteer,model_volunteers_volunteer,group_volunteer,1,1,1,0
+head_volunteer,head volunteer,model_volunteers_task,group_head_volunteer,1,1,1,1
+common_volunteer,common volunteer,model_volunteers_task,group_volunteer,1,1,1,0
 tasks_access_all,tasks access all,model_volunteers_task,,1,1,1,1
 car_admin,car admin,model_volunteers_car,group_head_volunteer,1,1,1,1
 car_read_all,car read all,model_volunteers_car,,1,0,0,0
+wizard_admin,wizard admin,model_volunteers_task_wizard,group_head_volunteer,1,1,1,1

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    
+    <template id="report_volunteer_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 t-field="doc.name" class="mt16"/>
+                        <div class="row mt32 mb32" id="task_info">
+                            <div class="col-auto mw-100 mb-2">
+                                <strong>Address:</strong>
+                                <t t-if="doc.contact_address_complete">
+                                    <span t-field="doc.contact_address_complete"/>
+                                </t>
+                            </div>
+                            <div t-if="doc.company_name" class="col-auto mw-100 mb-2">
+                                <strong>Company Name:</strong>
+                                <span t-field="doc.company_name.name"/>
+                            </div>
+                        </div>
+                        <h4>Tasks</h4>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th name="th_name">Name</th>
+                                    <th name="th_description">Description</th>
+                                    <th name="th_type">Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.task_ids" t-as="task">
+                                    <tr>
+                                        <td t-if="task.name" name="td_name">
+                                            <span t-field="task.name"/>
+                                        </td>
+                                        <td t-if="task.description" name="td_description">
+                                            <span t-field="task.description"/>
+                                        </td>
+                                        <td t-if="task.type" name="td_type">
+                                            <span t-field="task.type"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

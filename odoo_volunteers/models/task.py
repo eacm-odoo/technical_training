@@ -33,8 +33,9 @@ class Task(models.Model):
                                     default='draft')
     leader_id =fields.Many2one(comodel_name='res.partner',string='Leader')
     volunteer_ids= fields.Many2many(comodel_name='res.partner', string='Volunteers')
+    approval_ids = fields.One2many(comodel_name='approval.request', inverse_name='task_id', string='Approvals Requests')
 
-    @api.onchange('leader')
+    @api.onchange('leader_id')
     def _onchange_leader(self):
         if self.leader:
             self.state = 'ready'

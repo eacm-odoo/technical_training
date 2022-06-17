@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="volunteers_task_wizard_form_view">
+            <field name="name">volunteers.task.wizard.form</field>
+            <field name="model">volunteers.task.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Create Tasks Asigment">
+                    <group>
+                        <field name="volunteer_id" />
+                        <field name="task_volunteer_ids" invisible="1" />
+                        <field name="task_id" domain="[('volunteer_ids', 'not in', volunteer_id)]"/>
+                    </group>
+                    <footer>
+                        <button name="assing_tasks" string="Create" type="object" class="oe_highlight" />
+                        or
+                        <button string="Cancel" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="launch_task_wizard" model="ir.actions.act_window">
+            <field name="name">Assign Tasks</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">volunteers.task.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="context">{'volunteer_id':active_id}</field>
+        </record>
+    </data>
+</odoo>

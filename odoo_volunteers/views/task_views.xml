@@ -37,6 +37,9 @@
                             <page string="Volunteers">
                                 <field name="volunteer_ids"/>
                             </page>
+                            <page string="Approval Requests">
+                                <field name="approval_ids"/>
+                            </page>
                         </notebook>
                     </sheet>
                 </form>
@@ -64,5 +67,29 @@
                 </search>
             </field>
         </record> 
+
+        <record model="ir.ui.view" id="task_view_gantt">
+            <field name="name">volunteers.task.gantt</field>
+            <field name="model">volunteers.task</field>
+            <field name="arch" type="xml">
+                <gantt string="Task Gantt"
+                    date_start="startTime"
+                    date_stop="stopTime"
+                    default_group_by="leader_id">
+                </gantt>
+            </field>
+        </record>
+
+        <!-- Print: Task report -->
+        <record id="action_report_session" model="ir.actions.report">
+            <field name="name">Task report</field>
+            <field name="model">volunteers.task</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">odoo_volunteers.report_task_document</field>
+            <field name="report_file">odoo_volunteers.report_task</field>
+            <field name="print_report_name">Task Report</field>
+            <field name="binding_model_id" ref="model_volunteers_task"/>
+            <field name="binding_type">report</field>
+        </record>
     </data>
 </odoo>
