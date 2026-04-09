@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="webclient_offline" inherit_id="web.webclient_offline">
+    <xpath expr="//t[@t-call='web.layout']" position="replace">
+        <t t-call="web.layout"
+            html_data="{'style': 'height: 100%; margin: 0; overflow: hidden;'}"
+            title.translate="Offline - Play Pong"
+            head="head">
+            <canvas id="pong" style="display:block;background:#0a0a0a;"></canvas>
+            <div id="ui" style="
+                position:fixed;top:0;left:0;right:0;bottom:0;
+                display:flex;flex-direction:column;align-items:center;justify-content:center;
+                pointer-events:none;color:#fff;font-family:monospace;">
+                <div id="score" style="font-size:clamp(1.5rem,4vw,2.5rem);letter-spacing:2rem;margin-bottom:.5rem;opacity:.9;">0  0</div>
+                <div id="msg" style="font-size:clamp(.75rem,2vw,1rem);opacity:.5;letter-spacing:.15em;">PRESS SPACE OR TAP TO START</div>
+            </div>
+            <script type="text/javascript"><![CDATA[
+            (function() {
+                /* ── Auto-reload when back online ────────────────── */
+                window.addEventListener('online', () => location.reload());
+
+                /* ── Canvas setup ────────────────────────────────── */
+                const canvas = document.getElementById('pong');
+                const ctx    = canvas.getContext('2d');
+                const score  = document.getElementById('score');
+                const msg    = document.getElementById('msg');
+
+                function resize() {
+                    canvas.width  = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+                window.addEventListener('resize', resize);
+                resize();
+
+                /* ── Constants (relative to canvas size) ─────────── */
+                const PAD_W  = () => Math.max(8,  canvas.width  * .012);
+                const PAD_H  = () => Math.max(60, canvas.height * .14);
+                const BALL_R = () => Math.max(5,  canvas.width  * .008);
+                const SPEED0 = () => canvas.width * .006;
+                const MAX_AI = () => canvas.height * .012;   // AI max px/frame
+
+                /* ── State ───────────────────────────────────────── */
+                let state   = 'idle';   // idle | playing | scored
+                let pScore  = 0, aiScore = 0;
+
+                let ball = {}, padP = {}, padAI = {};
+
+                function reset(serve) {
+                    ball = {
+                        x: canvas.width / 2,
+                        y: canvas.height / 2,
+                        vx: SPEED0() * (serve === 'player' ? -1 : 1),
+                        vy: SPEED0() * (Math.random() > .5 ? 1 : -1),
+                    };
+                    padP = {
+                        x: PAD_W(),
+                        y: canvas.height / 2 - PAD_H() / 2,
+                        w: PAD_W(),
+                        h: PAD_H(),
+                        vy: 0,
+                    };
+                    padAI = {
+                        x: canvas.width - PAD_W() * 2,
+                        y: canvas.height / 2 - PAD_H() / 2,
+                        w: PAD_W(),
+                        h: PAD_H(),
+                    };
+                }
+
+                /* ── Input ───────────────────────────────────────── */
+                const keys = {};
+                document.addEventListener('keydown', e => {
+                    keys[e.code] = true;
+                    if (e.code === 'Space') {
+                        if (state === 'idle' || state === 'scored') { state = 'playing'; reset('player'); msg.textContent = ''; }
+                        e.preventDefault();
+                    }
+                });
+                document.addEventListener('keyup', e => keys[e.code] = false);
+
+                /* Touch: tap to start, drag/touch to move paddle */
+                let touchY = null;
+                document.addEventListener('touchstart', e => {
+                    if (state !== 'playing') { state = 'playing'; reset('player'); msg.textContent = ''; }
+                    touchY = e.touches[0].clientY;
+                }, {passive: true});
+                document.addEventListener('touchmove', e => {
+                    if (touchY === null || !padP) return;
+                    const dy = e.touches[0].clientY - touchY;
+                    touchY    = e.touches[0].clientY;
+                    padP.y   += dy;
+                    padP.y    = Math.max(0, Math.min(canvas.height - padP.h, padP.y));
+                }, {passive: true});
+
+                /* ── Physics helpers ─────────────────────────────── */
+                function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+
+                function ballHitsPad(b, p, r) {
+                    return b.x + r > p.x && b.x - r < p.x + p.w &&
+                           b.y + r > p.y && b.y - r < p.y + p.h;
+                }
+
+                function speedUp(ball) {
+                    const MAX = canvas.width * .016;
+                    const factor = 1.05;
+                    ball.vx = clamp(ball.vx * factor, -MAX, MAX) * Math.sign(ball.vx) || MAX * Math.sign(ball.vx);
+                    ball.vy = clamp(ball.vy * factor, -MAX, MAX) * Math.sign(ball.vy) || MAX * Math.sign(ball.vy);
+                    // fix signs after clamp
+                    const speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
+                    const s0 = SPEED0() * factor;
+                    if (speed < s0) { ball.vx *= s0/speed; ball.vy *= s0/speed; }
+                }
+
+                /* ── Update ──────────────────────────────────────── */
+                function update() {
+                    if (state !== 'playing') return;
+
+                    /* Player paddle */
+                    const speed = canvas.height * .010;
+                    if (keys['ArrowUp']   || keys['KeyW']) padP.y -= speed;
+                    if (keys['ArrowDown'] || keys['KeyS']) padP.y += speed;
+                    padP.y = clamp(padP.y, 0, canvas.height - padP.h);
+
+                    /* AI paddle — tracks ball with speed cap */
+                    const aiCenter = padAI.y + padAI.h / 2;
+                    const diff     = (ball.y) - aiCenter;
+                    padAI.y += clamp(diff * .12, -MAX_AI(), MAX_AI());
+                    padAI.y  = clamp(padAI.y, 0, canvas.height - padAI.h);
+
+                    /* Ball movement */
+                    ball.x += ball.vx;
+                    ball.y += ball.vy;
+
+                    /* Top / bottom walls */
+                    const r = BALL_R();
+                    if (ball.y - r <= 0)                  { ball.y = r;                    ball.vy *= -1; }
+                    if (ball.y + r >= canvas.height)       { ball.y = canvas.height - r;   ball.vy *= -1; }
+
+                    /* Player paddle collision */
+                    if (ballHitsPad(ball, padP, r) && ball.vx < 0) {
+                        ball.x  = padP.x + padP.w + r;
+                        const hit = (ball.y - (padP.y + padP.h / 2)) / (padP.h / 2);
+                        ball.vy  = hit * SPEED0() * 1.5;
+                        ball.vx  = Math.abs(ball.vx);
+                        speedUp(ball);
+                    }
+
+                    /* AI paddle collision */
+                    if (ballHitsPad(ball, padAI, r) && ball.vx > 0) {
+                        ball.x  = padAI.x - r;
+                        const hit = (ball.y - (padAI.y + padAI.h / 2)) / (padAI.h / 2);
+                        ball.vy  = hit * SPEED0() * 1.5;
+                        ball.vx  = -Math.abs(ball.vx);
+                        speedUp(ball);
+                    }
+
+                    /* Scoring */
+                    if (ball.x + r < 0) {
+                        aiScore++;
+                        scored('ai');
+                    } else if (ball.x - r > canvas.width) {
+                        pScore++;
+                        scored('player');
+                    }
+                }
+
+                function scored(who) {
+                    state = 'scored';
+                    updateScore();
+                    msg.textContent = (who === 'player' ? '🎉 POINT!' : '😬 OOPS!') + '  — SPACE / TAP TO CONTINUE';
+                }
+
+                function updateScore() {
+                    score.textContent = pScore + '  ' + aiScore;
+                }
+
+                /* ── Draw ────────────────────────────────────────── */
+                function draw() {
+                    const W = canvas.width, H = canvas.height;
+                    ctx.clearRect(0, 0, W, H);
+
+                    if (state === 'idle') {
+                        /* Splash */
+                        ctx.fillStyle = 'rgba(255,255,255,.04)';
+                        ctx.fillRect(0, 0, W, H);
+                        return;
+                    }
+
+                    /* Centre line */
+                    ctx.setLineDash([8, 12]);
+                    ctx.strokeStyle = 'rgba(255,255,255,.15)';
+                    ctx.lineWidth   = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(W / 2, 0);
+                    ctx.lineTo(W / 2, H);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    /* Paddles */
+                    ctx.fillStyle = '#fff';
+                    const r = 4;
+                    [padP, padAI].forEach(p => {
+                        ctx.beginPath();
+                        ctx.roundRect(p.x, p.y, p.w, p.h, r);
+                        ctx.fill();
+                    });
+
+                    /* Ball */
+                    const br = BALL_R();
+                    ctx.beginPath();
+                    ctx.arc(ball.x, ball.y, br, 0, Math.PI * 2);
+                    ctx.fillStyle = '#fff';
+                    ctx.fill();
+                }
+
+                /* ── Loop ────────────────────────────────────────── */
+                function loop() {
+                    update();
+                    draw();
+                    requestAnimationFrame(loop);
+                }
+
+                updateScore();
+                reset('player');
+                loop();
+            })();
+            ]]></script>
+        </t>
+    </xpath>
+</template>
+</odoo>
