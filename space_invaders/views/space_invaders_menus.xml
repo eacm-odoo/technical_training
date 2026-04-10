@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_space_invaders_root"
+        name="Space Invaders"
+        sequence="100"
+        web_icon="space_invaders,static/src/img/icon.png"
+    />
+
+    <menuitem
+        id="menu_space_invaders_game"
+        name="Jugar"
+        parent="menu_space_invaders_root"
+        action="action_space_invaders"
+        sequence="10"
+    />
+</odoo>
