@@ -1,0 +1,17 @@
+// Voice Input for Chatter
+// Visual feedback for the microphone button while recording
+
+.o-voiceInput-recording {
+    // Override any inherited color so the danger red is always visible
+    color: var(--danger) !important;
+
+    i.fa-microphone {
+        animation: o-voiceInput-pulse 1s ease-in-out infinite;
+    }
+}
+
+@keyframes o-voiceInput-pulse {
+    0%   { opacity: 1;   transform: scale(1); }
+    50%  { opacity: 0.4; transform: scale(1.2); }
+    100% { opacity: 1;   transform: scale(1); }
+}
